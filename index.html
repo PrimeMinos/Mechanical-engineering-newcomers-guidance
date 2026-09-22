@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الهندسة الميكانيكية</title>
+
+    <!-- PWA Setup -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff3300">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="دليل الميكانيك">
+
+    <style>
+        :root {
+            --bg: #0b0f17;
+            --surface: #131a26;
+            --surface-hover: #000d2b70;
+            --accent-pipe: #ff3300; /* Industrial Copper Accent */
+            --accent-glow: rgba(216, 76, 17, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #a13d0e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Header Branding */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 94, 29, 0.1);
+            border: 1px solid var(--accent-pipe);
+            color: var(--accent-pipe);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Vertical Conduit Layout Container */
+        .cards-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        /* Continuous Vertical Conduit Pipe Line */
+        .pipe-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 30px;
+            width: 6px;
+            background: linear-gradient(180deg, #1e293b, var(--accent-pipe), #1e293b);
+            z-index: 1;
+            box-shadow: 0 0 12px var(--accent-glow);
+            border-radius: 3px;
+        }
+
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Mechanical Cards */
+        .card {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-pipe);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
+        }
+
+        /* Pipe Connection Joint Marker */
+        .pipe-joint {
+            width: 14px;
+            height: 14px;
+            background: var(--accent-pipe);
+            border: 3px solid var(--bg);
+            border-radius: 50%;
+            position: absolute;
+            top: 35px;
+            right: -31px;
+            box-shadow: 0 0 8px var(--accent-pipe);
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            color: var(--accent-pipe);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .card-action {
+            margin-top: 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-pipe);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Modal Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 15, 23, 0.88);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--accent-pipe);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px var(--accent-glow);
+        }
+
+        .modal-content h2 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .modal-img-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .modal-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .modal-content p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: var(--accent-pipe);
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .close-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer Telegram Contact */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.55;
+            transition: opacity 0.3s ease;
+            line-height: 1.9;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer:hover {
+            opacity: 0.95;
+        }
+
+        footer p.footer-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        footer a {
+            color: var(--accent-pipe);
+            text-decoration: none;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <span class="badge">Mechanical Engineering guidance for first year students</span>
+        <h1>دليل كلية الهندسة الميكانيكية</h1>
+        <p class="subtitle">استكشف مواقع القاعات والمختبرات عبر المسار الميكانيكي</p>
+    </header>
+
+    <div class="cards-container">
+        <div class="pipe-line"></div>
+
+        <div class="cards-list">
+            
+            <!-- Box 1 -->
+            <div class="card" onclick="openModal('نبذة عن القسم', ['Picture assets/college.jpg'], 'تأسس قسم الهندسة الميكانيكية مع انشاء المعهد الصناعي العالي سنة 1960 بمساعده من الحكومة الالمانية، ثم تحول المعهد بعد ذلك إلى كلية الهندسة التكنولوجية ثم الى الجامعة التكنولوجية سنة 1975، حيث كان القسم يتكون من فرعين هما فرع الهندسة الميكانيكية (الفرع العام) و فرع هندسة ميكانيك السيارات. ثم تم افتتاح فرع هندسة ميكانيك الطائرات عام 1979 وافتتاح فرع هندسة التكييف والتجميد في العام 1986.')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 01</div>
+                <h3>نبذة عن القسم</h3>
+                <p>نبذة تعريفية عن قسم الهندسة الميكانيكية وتاريخه.</p>
+                <div class="card-action">عرض التفاصيل ↗</div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="card" onclick="openModal('شروط التقديم', [], '1_الوثيقة الأصلية معنونة إلى (الجامعة التكنولوجية / كلية الهندسة الميكانيكية / قسم&quot;حسب القسم المقبول فيه...) + (5) نُسَخ ملونة، أو تأييد تخرّج بالدرجات معنون (عدد 5).\n2_استمارة الفحص الطبي الأصلية + نسختان ملونتان.\n3_البطاقة المدرسية الأصلية.\n4_هوية الأحوال المدنية وشهادة الجنسية العراقية (أو البطاقة الوطنية الموحدة للطالب والوالدين) + بطاقة السكن + البطاقة التموينية، مستنسخة جميعها في ورقة واحدة بواقع (4) نُسَخ ملونة.\n5_صور شخصية حديثة ملونة ذات خلفية بيضاء (عدد 8).\n6_ملف (فايل) ورقي أخضر ذو مشابك حديدية (حصرًا).\n7_وصل تسجيل لأول مرة صادر من الشعبة المالية في القسم (الدفع عبر بطاقة الماستر كارد حصرًا).\n8_كفالة ضامنة في الوحدة القانونية للقسم للطلبة المقبولين على قناة التعليم الحكومي الخاص (الموازي) والطلبة المقبولين في الدراسة المسائية فقط.')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 02</div>
+                <h3>شروط التقديم</h3>
+                <p>الشروط والمتطلبات الأساسية للقبول في قسم الهندسة الميكانيكية للدراسات الأولية.</p>
+                <div class="card-action">عرض التفاصيل ↗</div>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="card" onclick="openModal('شروط التقديم للدراسة المسائية', [], '1_سحب استمارة التقديم من كلية الهندسة الميكانيكية لملئها وتأييدها من قِبل إدارة إعدادية الطالب حصراً.\n2_دفع رسوم التقديم والبالغة (25,000) دينار عبر بطاقة (الماستر كارد) في الشعبة المالية، الكائنة في البناية الرئيسية للقسم (الطابق الثاني).\n3_إعادة الاستمارة بعد ملئها وتصديقها من قِبل المدرسة إلى قسم الهندسة الميكانيكية، وانتظار قوائم القبول التي ستُعلن عبر القناة/المجموعة الخاصة بتسجيل الطلبة.\n4_تسديد الأجور الدراسية المترتبة على الطالب فور صدور أمر القبول، والبالغة (2,250,000) دينار عراقي عبر بطاقة (الماستر كارد) حصرًا\n5_المستمسكات وإجراءات القبول الأخرى موضحة تفصيلاً في قائمة &quot;شروط التقديم&quot;.\n6_تقديم طلب الاستضافة من الدراسة المسائية إلى الدراسة الصباحية يكون مشفوعًا بطلب خطي مع بيان الأسباب الموجبة، وتخضع لتدقيق رئاسة الكلية حصرًا وفي حال صدور الموافقة على الاستضافة للسنة الدراسية، يلتزم الطالب بدفع أجور إضافية بنسبة 25% من القسط السنوي للدراسة المسائية.')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 03</div>
+                <h3>شروط التقديم للدراسة المسائية</h3>
+                <p>الشروط والمتطلبات الخاصة بالتقديم للدراسة المسائية في قسم الهندسة الميكانيكية.</p>
+                <div class="card-action">عرض التفاصيل ↗</div>
+            </div>
+
+            <!-- Box 4 -->
+            <div class="card" onclick="openModal('شعبة التسجيل', ['Picture assets/main.jpg', 'Picture assets/registration.jpg'], 'ندخل من بوابة الكلية (المجاورة لقسم الهندسة الكيمياوية على اليمين) ونستدير يميناً لجهة الدرج والمصاعد، ثم نصعد الدرج للطابق الأول وسنجد باب شعبة التسجيل واضحاً على اليسار..')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 04</div>
+                <h3>شعبة التسجيل</h3>
+                <p>الطابق الأول - المبنى الرئيسي للقسم. لإكمال الإجراءات الإدارية وتوزيع الجداول.</p>
+                <div class="card-action">عرض المسار ↗</div>
+            </div>
+
+            <!-- Box 5 -->
+            <div class="card" onclick="openModal('ملحق الهندسة الميكانيكية', ['Picture assets/annex.jpg'], 'نخرج من بوابة القسم ونمشي باتجاه كلية الهندسة الكيمياوية، الملحق مقابلها مباشرةُ, أو من اتجاه باب العلوم, ثم نحو اليسار على ممشى الحديقة ويصبح أمامك الملحق.')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 05</div>
+                <h3>ملحق الهندسة الميكانيكية</h3>
+                <p>يحتوي على القاعات الدراسية للمراحل الأولى. اضغط لاستعراض المسار والتفاصيل بالتفصيل.</p>
+                <div class="card-action">عرض المسار ↗</div>
+            </div>
+
+            <!-- Box 6 -->
+            <div class="card" onclick="openModal('القاعات الرئيسية', ['Picture assets/hashem.jpg', 'Picture assets/muneer.jpg'], 'بعد الدخول من مدخل الكلية الأمامي, ننعطف نحو اليسار ثم نتوجه نحو الأمام حتى نصل الى درج منخفض نحو اليسار, نستخدم الدرج وتكون قاعة د. هاشم نحو اليمين من الدرج ويقابلها قاعة د. منير المظفر.')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 06</div>
+                <h3>القاعات الرئيسية</h3>
+                <p>الطابق الثاني - الممر الثاني. القاعات المخصصة للمحاضرات العامة والسمنارات.</p>
+                <div class="card-action">عرض المسار ↗</div>
+            </div>
+
+            <!-- Box 7 -->
+            <div class="card" onclick="openModal('المختبرات والورش العملية', [], 'توجد المختبرات والورش العملية في بناية الملحق في الطابق الأرضي والطابق الثالث وتحوي على مختبر الحرارة والفيزياء والكهرباء.')">
+                <div class="pipe-joint"></div>
+                <div class="card-tag">SYSTEM // 07</div>
+                <h3>المختبرات والورش العملية</h3>
+                <p>دليل المختبرات الهندسية (الحراريات، الديناميك، والورش) الموزعة بالساحة الخلفية.</p>
+                <div class="card-action">عرض المسار ↗</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Window -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">عنوان المكان</h2>
+            <div class="modal-img-container" id="modalImgContainer"></div>
+            <p id="modalDesc">شرح المسار...</p>
+            <button class="close-btn" onclick="closeModal()">إغلاق المسار</button>
+        </div>
+    </div>
+
+    <!-- Telegram Contacts Section -->
+    <footer>
+        <p class="footer-title">تواصلوا معنا على التليكرام</p>
+        <p>قناة تبليغات الهندسة الميكانيكية: <a href="https://t.me/Uotma1" target="_blank">https://t.me/Uotma1</a></p>
+        <p>بوت الميكانيك: <a href="https://t.me/MechanicalEng02_bot" target="_blank">https://t.me/MechanicalEng02_bot</a></p>
+    </footer>
+
+    <script>
+        function openModal(title, imgArray, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            
+            const container = document.getElementById('modalImgContainer');
+            container.innerHTML = '';
+
+            const images = Array.isArray(imgArray) ? imgArray : [imgArray];
+            
+            images.forEach((imgKey, index) => {
+                if (imgKey && imgKey.trim() !== '') {
+                    const img = document.createElement('img');
+                    img.className = 'modal-img';
+                    img.src = imgKey;
+                    img.alt = `${title} - صورة ${index + 1}`;
+                    container.appendChild(img);
+                }
+            });
+
+            document.getElementById('infoModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker Registered:', reg.scope))
+                    .catch((err) => console.error('Service Worker Registration Failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

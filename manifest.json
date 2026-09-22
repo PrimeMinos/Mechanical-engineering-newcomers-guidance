@@ -1,0 +1,22 @@
+{
+  "name": "Mechanical Department Guide",
+  "short_name": "Mech Guide",
+  "description": "Interactive guide and map for the Mechanical Engineering Department at University of technology.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#00f2fe",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "Picture assets/RTL.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "Picture assets/RTL.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
