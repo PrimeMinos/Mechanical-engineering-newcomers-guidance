@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mech-guide-v1';
+const CACHE_NAME = 'mech-guide-v2';
 
 // All critical assets to cache for offline availability
 const ASSETS_TO_CACHE = [
@@ -11,7 +11,8 @@ const ASSETS_TO_CACHE = [
   './Picture assets/registration.jpg',
   './Picture assets/annex.jpg',
   './Picture assets/hashem.jpg',
-  './Picture assets/muneer.jpg'
+  './Picture assets/muneer.jpg',
+  './Picture assets/m3ml.jpg'
 ];
 
 // Install Event - Caching Assets
