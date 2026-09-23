@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mech-guide-v3';
+const CACHE_NAME = 'mech-guide-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
